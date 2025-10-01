@@ -2,28 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import type { Link } from '@/lib/types';
 import LinkForm from '../components/LinkForm';
 import LinkList from '../components/LinkList';
 
 export default function Page() {
-  const [links, setLinks] = useState<Link[]>([]);
+  const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   async function load() {
     setError(null);
     try {
-      const data = await api<Link[]>('/links');
+      const data = await api('/links');
       setLinks(data);
-    } catch (e: any) {
+    } catch (e) {
       setError(e?.message ?? 'Failed to load');
     } finally {
       setLoading(false);
     }
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <div className="space-y-6">

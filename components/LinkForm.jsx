@@ -2,21 +2,20 @@
 
 import { useState } from 'react';
 import { api } from '@/lib/api';
-import type { Link } from '@/lib/types';
 
-export default function LinkForm({ onCreated }: { onCreated: () => void }) {
+export default function LinkForm({ onCreated }) {
   const [code, setCode] = useState('demo123');
   const [url, setUrl] = useState('https://staging.example.com');
   const [title, setTitle] = useState('Demo Link');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
-  async function submit(e?: React.FormEvent) {
+  async function submit(e) {
     e?.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      await api<Link>('/links', {
+      await api('/links', {
         method: 'POST',
         body: JSON.stringify({ code, destination_url: url, title }),
       });
@@ -24,7 +23,7 @@ export default function LinkForm({ onCreated }: { onCreated: () => void }) {
       setUrl('');
       setTitle('');
       onCreated();
-    } catch (err: any) {
+    } catch (err) {
       setError(err?.message ?? 'Failed to create link');
     } finally {
       setLoading(false);

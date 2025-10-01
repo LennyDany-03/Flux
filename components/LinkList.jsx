@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { api } from '@/lib/api';
-import type { Link } from '@/lib/types';
 import Image from 'next/image';
-function Copy({ text, small }: { text: string; small?: boolean }) {
+
+function Copy({ text, small }) {
   const [copied, setCopied] = useState(false);
+
   return (
     <button
       type="button"
@@ -24,27 +25,21 @@ function Copy({ text, small }: { text: string; small?: boolean }) {
   );
 }
 
-export default function LinkList({
-  items,
-  refresh,
-}: {
-  items: Link[];
-  refresh: () => void;
-}) {
-  const [qrFor, setQrFor] = useState<string | null>(null);
+export default function LinkList({ items, refresh }) {
+  const [qrFor, setQrFor] = useState(null);
 
-  async function toggleActive(code: string, is_active: boolean) {
-    await api<Link>(`/links/${code}`, {
+  async function toggleActive(code, is_active) {
+    await api(`/links/${code}`, {
       method: 'PATCH',
       body: JSON.stringify({ is_active }),
     });
     refresh();
   }
 
-  async function updateDest(code: string, current: string) {
+  async function updateDest(code, current) {
     const dest = prompt('New destination URL', current);
     if (!dest) return;
-    await api<Link>(`/links/${code}`, {
+    await api(`/links/${code}`, {
       method: 'PATCH',
       body: JSON.stringify({ destination_url: dest }),
     });
@@ -149,6 +144,8 @@ export default function LinkList({
                   alt={`QR for ${l.code}`}
                   className="mx-auto rounded-xl border border-white/10"
                   src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/qr/${l.code}`}
+                  width={200}
+                  height={200}
                 />
                 <div className="mt-3 flex items-center justify-between text-xs">
                   <a
