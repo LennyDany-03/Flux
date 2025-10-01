@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import type { Link } from '@/lib/types';
-
+import Image from 'next/image';
 function Copy({ text, small }: { text: string; small?: boolean }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -145,7 +145,7 @@ export default function LinkList({
                     ✕
                   </button>
                 </div>
-                <img
+                <Image
                   alt={`QR for ${l.code}`}
                   className="mx-auto rounded-xl border border-white/10"
                   src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/qr/${l.code}`}
